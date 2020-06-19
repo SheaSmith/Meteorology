@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_sunny">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:visibility="gone"
+        tools:context=".CurrentActivity"
+        tools:visibility="visible">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mainView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_raining"
+            android:paddingTop="@*android:dimen/status_bar_height"
+            android:paddingBottom="48dp">
+
+            <TextView
+                android:id="@+id/neighbourhood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Mabel Bush"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                app:fontFamily="sans-serif-light"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ScrollView
+                android:id="@+id/scrollView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"></LinearLayout>
+            </ScrollView>
+
+            <TextView
+                android:id="@+id/lastUpdated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Tue, 8:31 pm"
+                android:textColor="@color/white"
+                app:fontFamily="sans-serif-light"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/neighbourhood" />
+
+            <TextView
+                android:id="@+id/state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="48dp"
+                android:text="Raining"
+                android:textColor="@color/white"
+                android:textSize="36sp"
+                app:fontFamily="sans-serif-light"
+                app:layout_constraintStart_toEndOf="@+id/stateIcon"
+                app:layout_constraintTop_toBottomOf="@+id/lastUpdated" />
+
+            <ImageView
+                android:id="@+id/stateIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:tint="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/state"
+                app:layout_constraintStart_toStartOf="@+id/leftGutterGuide"
+                app:layout_constraintTop_toTopOf="@+id/state"
+                app:srcCompat="@drawable/weather_pouring" />
+
+            <TextView
+                android:id="@+id/temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="13°"
+                android:textColor="@color/white"
+                android:textSize="160sp"
+                app:fontFamily="sans-serif-thin"
+                app:layout_constraintStart_toStartOf="@+id/leftGutterGuide"
+                app:layout_constraintTop_toBottomOf="@+id/state" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="@+id/temperature"
+                app:layout_constraintStart_toEndOf="@+id/temperature"
+                app:layout_constraintTop_toTopOf="@+id/temperature">
+
+                <TextView
+                    android:id="@+id/feelsLikeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Feels Like"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/feelsLike"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="13°C"
+                    android:textColor="@color/white"
+                    android:textSize="34sp"
+                    app:fontFamily="sans-serif-thin" />
+
+                <TextView
+                    android:id="@+id/dewPointTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Dew Point"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/dewPoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8°C"
+                    android:textColor="@color/white"
+                    android:textSize="34sp"
+                    app:fontFamily="sans-serif-thin" />
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/forecast"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/button_forecast"
+                android:text="Forecast"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textColorHighlight="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:backgroundTint="@android:color/transparent"
+                app:backgroundTintMode="add"
+                app:icon="@drawable/weather_sunny"
+                app:iconTint="@color/white"
+                app:layout_constraintEnd_toStartOf="@+id/centerGuide"
+                app:layout_constraintStart_toStartOf="@+id/leftGutterGuide"
+                app:layout_constraintTop_toBottomOf="@+id/temperature" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/history"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/button_history"
+                android:text="History"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textColorHighlight="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:backgroundTint="@android:color/transparent"
+                app:backgroundTintMode="add"
+                app:icon="@drawable/icon_history"
+                app:iconTint="@color/white"
+                app:layout_constraintEnd_toStartOf="@+id/rightGutterGuide"
+                app:layout_constraintStart_toStartOf="@+id/centerGuide"
+                app:layout_constraintTop_toTopOf="@+id/forecast" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/centerGuide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.50121653" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/rightGutterGuide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="32dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/leftGutterGuide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="32dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/firstThirdGuide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.33" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/secondThirdGuide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.66" />
+
+            <LinearLayout
+                android:id="@+id/humidityModule"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/module_current_light"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/windSpeedModule"
+                app:layout_constraintEnd_toStartOf="@+id/firstThirdGuide"
+                app:layout_constraintStart_toStartOf="@+id/leftGutterGuide"
+                app:layout_constraintTop_toTopOf="@+id/windSpeedModule">
+
+                <ImageView
+                    android:id="@+id/humidityIcon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="4dp"
+                    android:tint="@color/white"
+                    app:srcCompat="@drawable/icon_humidity" />
+
+                <TextView
+                    android:id="@+id/humidityTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Humidity"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/humidity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="68%"
+                    android:textColor="@color/white"
+                    android:textSize="34sp"
+                    app:fontFamily="sans-serif-thin" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/windSpeedModule"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/module_current_light"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/secondThirdGuide"
+                app:layout_constraintStart_toStartOf="@+id/firstThirdGuide"
+                app:layout_constraintTop_toBottomOf="@+id/forecast">
+
+                <ImageView
+                    android:id="@+id/windSpeedIcon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="4dp"
+                    android:tint="@color/white"
+                    app:srcCompat="@drawable/icon_wind_speed" />
+
+                <TextView
+                    android:id="@+id/windSpeedTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Wind Speed"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/windSpeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="12 km/h"
+                    android:textColor="@color/white"
+                    android:textSize="34sp"
+                    app:fontFamily="sans-serif-thin" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/windGustModule"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/module_current_light"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/windSpeedModule"
+                app:layout_constraintEnd_toStartOf="@+id/rightGutterGuide"
+                app:layout_constraintStart_toStartOf="@+id/secondThirdGuide"
+                app:layout_constraintTop_toBottomOf="@+id/forecast">
+
+                <ImageView
+                    android:id="@+id/windGustIcon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="4dp"
+                    android:tint="@color/white"
+                    app:srcCompat="@drawable/icon_wind_gust" />
+
+                <TextView
+                    android:id="@+id/windGustTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Wind Gust"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/windGust"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="18 km/h"
+                    android:textColor="@color/white"
+                    android:textSize="34sp"
+                    app:fontFamily="sans-serif-thin" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/windDirectionModule"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/module_current_light"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/rainAccumulationModule"
+                app:layout_constraintEnd_toStartOf="@+id/firstThirdGuide"
+                app:layout_constraintStart_toStartOf="@+id/leftGutterGuide"
+                app:layout_constraintTop_toTopOf="@+id/rainAccumulationModule">
+
+                <ImageView
+                    android:id="@+id/windDirectionIcon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="4dp"
+                    android:tint="@color/white"
+                    app:srcCompat="@drawable/icon_wind_direction" />
+
+                <TextView
+                    android:id="@+id/windDirectionTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Wind Direction"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/windDirection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="295° WSE"
+                    android:textColor="@color/white"
+                    android:textSize="34sp"
+                    app:fontFamily="sans-serif-thin" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rainAccumulationModule"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/module_current_light"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/secondThirdGuide"
+                app:layout_constraintStart_toStartOf="@+id/firstThirdGuide"
+                app:layout_constraintTop_toBottomOf="@+id/windSpeedModule">
+
+                <ImageView
+                    android:id="@+id/rainAccumulationIcon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="4dp"
+                    android:tint="@color/white"
+                    app:srcCompat="@drawable/icon_rain_accumulation" />
+
+                <TextView
+                    android:id="@+id/rainAccumulationTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Rain Accumulation"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/rainAccumulation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="0.0 mm"
+                    android:textColor="@color/white"
+                    android:textSize="34sp"
+                    app:fontFamily="sans-serif-thin" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rainRateModule"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/module_current_light"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="@+id/rainAccumulationModule"
+                app:layout_constraintEnd_toStartOf="@+id/rightGutterGuide"
+                app:layout_constraintStart_toStartOf="@+id/secondThirdGuide"
+                app:layout_constraintTop_toTopOf="@+id/rainAccumulationModule">
+
+                <ImageView
+                    android:id="@+id/rainRateIcon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="4dp"
+                    android:tint="@color/white"
+                    app:srcCompat="@drawable/icon_rain_rate" />
+
+                <TextView
+                    android:id="@+id/rainRateTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Rain Rate"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/rainRate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="0.0 mm/h"
+                    android:textColor="@color/white"
+                    android:textSize="34sp"
+                    app:fontFamily="sans-serif-thin" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/pressureModule"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/module_current_light"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/firstThirdGuide"
+                app:layout_constraintStart_toStartOf="@+id/leftGutterGuide"
+                app:layout_constraintTop_toBottomOf="@+id/rainAccumulationModule">
+
+                <ImageView
+                    android:id="@+id/pressureIcon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="4dp"
+                    android:tint="@color/white"
+                    app:srcCompat="@drawable/icon_pressure" />
+
+                <TextView
+                    android:id="@+id/pressureTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Pressure"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/pressure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="1024 hpa"
+                    android:textColor="@color/white"
+                    android:textSize="34sp"
+                    app:fontFamily="sans-serif-thin" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/uvIndexModule"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/module_current_light"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/pressureModule"
+                app:layout_constraintEnd_toStartOf="@+id/secondThirdGuide"
+                app:layout_constraintStart_toStartOf="@+id/firstThirdGuide"
+                app:layout_constraintTop_toTopOf="@+id/pressureModule">
+
+                <ImageView
+                    android:id="@+id/uvIndexIcon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="4dp"
+                    android:tint="@color/white"
+                    app:srcCompat="@drawable/icon_uv_index" />
+
+                <TextView
+                    android:id="@+id/uvIndexTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="UV Index"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/uvIndex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:textSize="34sp"
+                    app:fontFamily="sans-serif-thin" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/solarRadiationModule"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/module_current_light"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/pressureModule"
+                app:layout_constraintEnd_toStartOf="@+id/rightGutterGuide"
+                app:layout_constraintStart_toStartOf="@+id/secondThirdGuide"
+                app:layout_constraintTop_toTopOf="@+id/pressureModule">
+
+                <ImageView
+                    android:id="@+id/solarRadiationIcon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="4dp"
+                    android:tint="@color/white"
+                    app:srcCompat="@drawable/icon_solar_radiation" />
+
+                <TextView
+                    android:id="@+id/solarRadiationTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Solar Radiation"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/solarRadiation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="100.0 W/m²"
+                    android:textColor="@color/white"
+                    android:textSize="34sp"
+                    app:fontFamily="sans-serif-thin" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/loader"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        tools:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

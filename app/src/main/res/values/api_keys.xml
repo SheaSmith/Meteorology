@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="station_id">ISTLMABE2</string>
+    <string name="api_key">29ec86ca60fd4161ac86ca60fd4161d0</string>
+    <string name="geocode">-46.28402328,168.5231781</string>
+</resources>
