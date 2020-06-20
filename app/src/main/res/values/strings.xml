@@ -4,4 +4,20 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="feels_like">Feels Like</string>
+    <string name="dew_point">Dew Point</string>
+    <string name="forecast">Forecast</string>
+    <string name="history">History</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="wind_gust">Wind Gust</string>
+    <string name="wind_direction">Wind Direction</string>
+    <string name="rain_accumulation">Rain Accumulation</string>
+    <string name="rain_rate">Rain Rate</string>
+    <string name="pressure">Pressure</string>
+    <string name="uv_index">UV Index</string>
+    <string name="solar_radiation">Solar Radiation</string>
+    <string name="settings">Settings</string>
+    <string name="current_weather">Current Weather</string>
+    <string name="back">Back</string>
 </resources>
