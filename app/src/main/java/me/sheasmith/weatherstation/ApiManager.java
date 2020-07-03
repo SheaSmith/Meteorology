@@ -4,14 +4,19 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import me.sheasmith.weatherstation.models.ApiResponse;
 import me.sheasmith.weatherstation.models.CurrentConditions;
 import me.sheasmith.weatherstation.models.Forecast;
+import me.sheasmith.weatherstation.models.Observation;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -49,59 +54,107 @@ public class ApiManager {
         webThread.start();
     }
 
-//    public static void getHourlyHistory(final ApiResponse<HourlyHistory> callback, Context context) {
-//        Thread webThread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                OkHttpClient client = new OkHttpClient();
-//
-//                Request request = new Request.Builder()
-//                        .url("https://api.weather.com/v2/pws/observations/hourly/7day?stationId=" + context.getString(R.string.station_id) + "&format=json&units=m&apiKey=" + context.getString(R.string.api_key))
-//                        .get()
-//                        .build();
-//
-//                try {
-//
-//                    Response response = client.newCall(request).execute();
-//                    String json = response.body().string();
-//                    Gson gson = new Gson();
-//                    HourlyHistory hourlyHistory = gson.fromJson(json, HourlyHistory.class);
-//                    callback.success(hourlyHistory);
-//
-//                } catch (Exception e) {
-//                    callback.error(e);
-//                }
-//            }
-//        });
-//        webThread.start();
-//    }
-//
-//    public static void getDailyHistory(final ApiResponse<DailyHistory> callback, Context context) {
-//        Thread webThread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                OkHttpClient client = new OkHttpClient();
-//
-//                Request request = new Request.Builder()
-//                        .url("https://api.weather.com/v2/pws/dailysummary/7day?stationId=" + context.getString(R.string.station_id) + "&format=json&units=m&apiKey=" + context.getString(R.string.api_key))
-//                        .get()
-//                        .build();
-//
-//                try {
-//
-//                    Response response = client.newCall(request).execute();
-//                    String json = response.body().string();
-//                    Gson gson = new Gson();
-//                    DailyHistory dailyHistory = gson.fromJson(json, DailyHistory.class);
-//                    callback.success(dailyHistory);
-//
-//                } catch (Exception e) {
-//                    callback.error(e);
-//                }
-//            }
-//        });
-//        webThread.start();
-//    }
+    public static void getHourlyHistory(final ApiResponse<List<Observation>> callback, Date start, Date end, Context context) {
+        Thread webThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
+
+                Request request = new Request.Builder()
+                        .url("https://api.weather.com/v2/pws/history/hourly?stationId=" + context.getString(R.string.station_id) + "&format=json&units=m&numericPrecision=decimal&apiKey=" + context.getString(R.string.api_key) + "&startDate=" + format.format(start) + "&endDate=" + format.format(end))
+                        .get()
+                        .build();
+
+                try {
+
+                    Response response = client.newCall(request).execute();
+                    String json = response.body().string();
+                    JSONArray jsonArray = new JSONObject(json).getJSONArray("observations");
+
+                    List<Observation> observations = new ArrayList<>();
+                    for (int i = 0 ; i != jsonArray.length() ; i++) {
+                        observations.add(new Observation(jsonArray.getJSONObject(i)));
+                    }
+
+                    callback.success(observations);
+
+                } catch (Exception e) {
+                    callback.error(e);
+                }
+            }
+        });
+        webThread.start();
+    }
+
+    public static void getDailyHistory(final ApiResponse<List<Observation>> callback, Date start, Date end, Context context) {
+        Thread webThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
+
+                Request request = new Request.Builder()
+                        .url("https://api.weather.com/v2/pws/history/daily?stationId=" + context.getString(R.string.station_id) + "&format=json&units=m&numericPrecision=decimal&apiKey=" + context.getString(R.string.api_key) + "&startDate=" + format.format(start) + "&endDate=" + format.format(end))
+                        .get()
+                        .build();
+
+                try {
+
+                    Response response = client.newCall(request).execute();
+                    String json = response.body().string();
+                    JSONArray jsonArray = new JSONObject(json).getJSONArray("observations");
+
+                    List<Observation> observations = new ArrayList<>();
+                    for (int i = 0 ; i != jsonArray.length() ; i++) {
+                        observations.add(new Observation(jsonArray.getJSONObject(i)));
+                    }
+
+                    callback.success(observations);
+
+                } catch (Exception e) {
+                    callback.error(e);
+                }
+            }
+        });
+        webThread.start();
+    }
+
+    public static void getRapidHistory(final ApiResponse<List<Observation>> callback, Date date, Context context) {
+        Thread webThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
+
+                Request request = new Request.Builder()
+                        .url("https://api.weather.com/v2/pws/history/all?stationId=" + context.getString(R.string.station_id) + "&format=json&units=m&numericPrecision=decimal&apiKey=" + context.getString(R.string.api_key) + "&date=" + format.format(date))
+                        .get()
+                        .build();
+
+                try {
+
+                    Response response = client.newCall(request).execute();
+                    String json = response.body().string();
+                    JSONArray jsonArray = new JSONObject(json).getJSONArray("observations");
+
+                    List<Observation> observations = new ArrayList<>();
+                    for (int i = 0 ; i != jsonArray.length() ; i++) {
+                        observations.add(new Observation(jsonArray.getJSONObject(i)));
+                    }
+
+                    callback.success(observations);
+
+                } catch (Exception e) {
+                    callback.error(e);
+                }
+            }
+        });
+        webThread.start();
+    }
 
     public static void getForecast(final ApiResponse<List<Forecast>> callback, Context context) {
         Thread webThread = new Thread(new Runnable() {

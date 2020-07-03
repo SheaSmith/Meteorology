@@ -5,6 +5,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.text.SimpleDateFormat;
@@ -13,7 +14,7 @@ import java.util.Date;
 /**
  * Created by TheDiamondPicks on 28/02/2019.
  */
-public class DateValueFormatter implements IAxisValueFormatter {
+public class DateValueFormatter extends ValueFormatter {
 
     private SimpleDateFormat format;
 
@@ -22,7 +23,7 @@ public class DateValueFormatter implements IAxisValueFormatter {
     }
 
     @Override
-    public String getFormattedValue(float value, AxisBase axis) {
-        return format.format(new Date((long) (value * 1000L)));
+    public String getFormattedValue(float value) {
+        return format.format(new Date((long) (value)));
     }
 }

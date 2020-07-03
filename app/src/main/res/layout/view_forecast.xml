@@ -256,7 +256,7 @@
             android:padding="16dp"
             app:layout_constraintEnd_toStartOf="@+id/rightGutterGuide"
             app:layout_constraintStart_toStartOf="@+id/leftGutterGuide"
-            app:layout_constraintTop_toBottomOf="@+id/highModule">
+            app:layout_constraintTop_toBottomOf="@+id/temperatureModule">
 
             <TextView
                 android:id="@+id/rain"
@@ -600,7 +600,7 @@
             android:padding="16dp"
             app:layout_constraintEnd_toStartOf="@+id/rightGutterGuide"
             app:layout_constraintStart_toStartOf="@+id/leftGutterGuide"
-            app:layout_constraintTop_toBottomOf="@+id/windModule">
+            app:layout_constraintTop_toBottomOf="@+id/highModule">
 
             <TextView
                 android:id="@+id/temperature"
@@ -796,7 +796,7 @@
             android:padding="16dp"
             app:layout_constraintEnd_toStartOf="@+id/rightGutterGuide"
             app:layout_constraintStart_toStartOf="@+id/leftGutterGuide"
-            app:layout_constraintTop_toBottomOf="@+id/temperatureModule">
+            app:layout_constraintTop_toBottomOf="@+id/windModule">
 
             <ImageView
                 android:id="@+id/moonStageIcon"

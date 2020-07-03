@@ -55,6 +55,10 @@ class CurrentActivity : AppCompatActivity() {
         forecast.setOnClickListener {
             startActivity(Intent(this@CurrentActivity, ForecastActivity::class.java))
         }
+
+        history.setOnClickListener {
+            startActivity(Intent(this@CurrentActivity, HistoryActivity::class.java))
+        }
     }
 
     fun directionToCardinal(x: Int): String? {

@@ -188,6 +188,9 @@ class ForecastFragment(forecast: Forecast, lastUpdatedDate: Date) : Fragment() {
 
         moonStageIcon.setImageResource(moonIcon)
 
+        if (PreferencesHelper.isSouthernHemisphere(requireContext()))
+            moonStageIcon.rotation = 180f
+
         val timeFormat = SimpleDateFormat("h:mm aa", Locale.ENGLISH)
         moonrise.text = timeFormat.format(forecast.moonriseTime)
         moonset.text = timeFormat.format(forecast.moonsetTime)
