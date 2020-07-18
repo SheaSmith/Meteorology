@@ -19,25 +19,19 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="gone" />
 
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
         <ScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
             android:visibility="gone"
-            tools:context=".CurrentActivity"
-            tools:visibility="visible">
+            tools:context=".ui.activities.CurrentActivity"
+            tools:visibility="visible"
+            android:animateLayoutChanges="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/mainView"
                 android:layout_width="match_parent"
@@ -45,7 +39,7 @@
                 android:background="@drawable/background_history">
 
                 <TextView
-                    android:id="@+id/title"
+                    android:id="@+id/pageTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -55,16 +49,16 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:text="@string/history" />
+                    android:text="@string/wind_gust" />
 
                 <ImageView
                     android:id="@+id/back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/back"
-                    app:layout_constraintBottom_toBottomOf="@+id/title"
+                    app:layout_constraintBottom_toBottomOf="@+id/pageTitle"
                     app:layout_constraintStart_toStartOf="@+id/leftGutterGuide"
-                    app:layout_constraintTop_toTopOf="@+id/title"
+                    app:layout_constraintTop_toTopOf="@+id/pageTitle"
                     app:srcCompat="@drawable/icon_back" />
 
                 <com.google.android.material.chip.ChipGroup
@@ -74,14 +68,15 @@
                     app:checkedChip="@id/hourly"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/title">
+                    app:layout_constraintTop_toBottomOf="@+id/pageTitle"
+                    app:singleSelection="true">
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/rapid"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Rapid"
+                        android:text="@string/rapid"
                         android:textColor="@color/black"
                         app:chipBackgroundColor="@drawable/chip" />
 
@@ -90,7 +85,7 @@
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hourly"
+                        android:text="@string/hourly"
                         android:textColor="@color/black"
                         app:chipBackgroundColor="@drawable/chip" />
 
@@ -99,13 +94,13 @@
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Daily"
+                        android:text="@string/daily"
                         android:textColor="@color/black"
                         app:chipBackgroundColor="@drawable/chip" />
                 </com.google.android.material.chip.ChipGroup>
 
                 <LinearLayout
-                    android:id="@+id/temperatureModule"
+                    android:id="@+id/historyModule"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -117,10 +112,10 @@
                     app:layout_constraintTop_toBottomOf="@+id/chipGroup">
 
                     <TextView
-                        android:id="@+id/temperature"
+                        android:id="@+id/historyTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/temperature"
+                        android:text="@string/history"
                         android:textColor="@color/black"
                         android:textSize="24sp"
                         android:gravity="center"
@@ -129,11 +124,111 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.github.mikephil.charting.charts.LineChart
-                        android:id="@+id/temperatureChart"
+                        android:id="@+id/historyChart"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp" />
+                        android:layout_height="400dp" />
 
                 </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/markerModule"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:padding="16dp"
+                    android:background="@drawable/module_generic"
+                    app:layout_constraintEnd_toStartOf="@+id/rightGutterGuide"
+                    app:layout_constraintStart_toStartOf="@+id/leftGutterGuide"
+                    app:layout_constraintTop_toBottomOf="@+id/historyModule">
+
+                    <TextView
+                        android:id="@+id/dateTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/overall_statistics"
+                        android:textColor="@color/black"
+                        android:textSize="24sp"
+                        android:gravity="center"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/maximumTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/high"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/averageTitle"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/dateTime" />
+
+                    <TextView
+                        android:id="@+id/maximum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        app:fontFamily="sans-serif-thin"
+                        app:layout_constraintEnd_toEndOf="@+id/maximumTitle"
+                        app:layout_constraintStart_toStartOf="@+id/maximumTitle"
+                        app:layout_constraintTop_toBottomOf="@+id/maximumTitle"
+                        tools:text="10 km/h" />
+
+                    <TextView
+                        android:id="@+id/averageTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/average"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/minimumTitle"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/maximumTitle"
+                        app:layout_constraintTop_toBottomOf="@+id/dateTime" />
+
+                    <TextView
+                        android:id="@+id/average"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        app:fontFamily="sans-serif-thin"
+                        app:layout_constraintEnd_toEndOf="@+id/averageTitle"
+                        app:layout_constraintStart_toStartOf="@+id/averageTitle"
+                        app:layout_constraintTop_toBottomOf="@+id/averageTitle"
+                        tools:text="5 km/h" />
+
+                    <TextView
+                        android:id="@+id/minimumTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/low"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/averageTitle"
+                        app:layout_constraintTop_toBottomOf="@+id/dateTime" />
+
+                    <TextView
+                        android:id="@+id/minimum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        app:fontFamily="sans-serif-thin"
+                        app:layout_constraintEnd_toEndOf="@+id/minimumTitle"
+                        app:layout_constraintStart_toStartOf="@+id/minimumTitle"
+                        app:layout_constraintTop_toBottomOf="@+id/minimumTitle"
+                        tools:text="25 km/h" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/leftGutterGuide"
@@ -151,5 +246,4 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

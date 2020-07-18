@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/markerModule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/module_generic"
+            android:padding="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/rightGutterGuide"
+            app:layout_constraintStart_toStartOf="@+id/leftGutterGuide"
+            app:layout_constraintTop_toBottomOf="@+id/historyModule">
+
+            <TextView
+                android:id="@+id/dateTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Wednesday, July 4, 6:30 PM" />
+
+            <TextView
+                android:id="@+id/maximumTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/high"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/averageTitle"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dateTime" />
+
+            <TextView
+                android:id="@+id/maximum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:fontFamily="sans-serif-thin"
+                app:layout_constraintEnd_toEndOf="@+id/maximumTitle"
+                app:layout_constraintStart_toStartOf="@+id/maximumTitle"
+                app:layout_constraintTop_toBottomOf="@+id/maximumTitle"
+                tools:text="10 km/h" />
+
+            <TextView
+                android:id="@+id/averageTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/average"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/minimumTitle"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/maximumTitle"
+                app:layout_constraintTop_toBottomOf="@+id/dateTime" />
+
+            <TextView
+                android:id="@+id/average"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:fontFamily="sans-serif-thin"
+                app:layout_constraintEnd_toEndOf="@+id/averageTitle"
+                app:layout_constraintStart_toStartOf="@+id/averageTitle"
+                app:layout_constraintTop_toBottomOf="@+id/averageTitle"
+                tools:text="5 km/h" />
+
+            <TextView
+                android:id="@+id/minimumTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/low"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/averageTitle"
+                app:layout_constraintTop_toBottomOf="@+id/dateTime" />
+
+            <TextView
+                android:id="@+id/minimum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:fontFamily="sans-serif-thin"
+                app:layout_constraintEnd_toEndOf="@+id/minimumTitle"
+                app:layout_constraintStart_toStartOf="@+id/minimumTitle"
+                app:layout_constraintTop_toBottomOf="@+id/minimumTitle"
+                tools:text="25 km/h" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

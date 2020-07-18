@@ -1,4 +1,4 @@
-package me.sheasmith.weatherstation;
+package me.sheasmith.weatherstation.helpers;
 
 /**
  * Created by Shea Smith on 20/06/2020.

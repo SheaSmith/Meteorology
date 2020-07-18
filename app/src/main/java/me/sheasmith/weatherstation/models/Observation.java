@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class Observation {
     public String stationId;
@@ -50,7 +51,9 @@ public class Observation {
     public Observation(JSONObject json) throws JSONException, ParseException {
         stationId = json.getString("stationID");
         timezone = json.getString("tz");
-        observationTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH).parse(json.getString("obsTimeUtc"));
+        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH);
+        isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        observationTime = isoFormat.parse(json.getString("obsTimeUtc"));
         latitude = json.getDouble("lat");
         longitude = json.getDouble("lon");
         solarRadiation = json.getDouble("solarRadiationHigh");

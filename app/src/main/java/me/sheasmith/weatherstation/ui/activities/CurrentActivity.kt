@@ -1,4 +1,4 @@
-package me.sheasmith.weatherstation
+package me.sheasmith.weatherstation.ui.activities
 
 import android.animation.LayoutTransition
 import android.content.Intent
@@ -12,11 +12,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.widget.ImageViewCompat
 import kotlinx.android.synthetic.main.activity_current.*
+import me.sheasmith.weatherstation.ApiManager
+import me.sheasmith.weatherstation.R
+import me.sheasmith.weatherstation.helpers.ForecastHelper
+import me.sheasmith.weatherstation.helpers.FormatHelper
+import me.sheasmith.weatherstation.helpers.UnitsHelper
 import me.sheasmith.weatherstation.models.ApiResponse
 import me.sheasmith.weatherstation.models.CurrentConditions
 import me.sheasmith.weatherstation.models.Forecast
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class CurrentActivity : AppCompatActivity() {
@@ -57,13 +60,44 @@ class CurrentActivity : AppCompatActivity() {
         }
 
         history.setOnClickListener {
-            startActivity(Intent(this@CurrentActivity, HistoryActivity::class.java))
+            showHistory("temperature")
+        }
+
+
+
+        humidityModule.setOnClickListener {
+            showHistory("humidity")
+        }
+        windSpeedModule.setOnClickListener {
+            showHistory("windSpeed")
+        }
+        windGustModule.setOnClickListener {
+            showHistory("windGust")
+        }
+        windDirectionModule.setOnClickListener {
+            showHistory("windDirection")
+        }
+        rainAccumulationModule.setOnClickListener {
+            showHistory("rainAccumulation")
+        }
+        rainRateModule.setOnClickListener {
+            showHistory("rainRate")
+        }
+        pressureModule.setOnClickListener {
+            showHistory("pressure")
+        }
+        uvIndexModule.setOnClickListener {
+            showHistory("uvIndex")
+        }
+        solarRadiationModule.setOnClickListener {
+            showHistory("solarRadiation")
         }
     }
 
-    fun directionToCardinal(x: Int): String? {
-        val directions = arrayOf("N", "NE", "E", "SE", "S", "SW", "W", "NW", "N")
-        return directions[(x % 360 / 45)]
+    private fun showHistory(type: String) {
+        val historyIntent = Intent(this@CurrentActivity, HistoryActivity::class.java)
+        historyIntent.putExtra("type", type)
+        startActivity(historyIntent)
     }
 
     private fun doRequest() {
@@ -81,20 +115,21 @@ class CurrentActivity : AppCompatActivity() {
                             stateIcon.setImageResource(ForecastHelper.getIcon(code, thisForecast?.sunsetTime, thisForecast?.sunriseTime))
 
                             neighbourhood.text = currentConditions.neighbourhood
-                            lastUpdated.text = SimpleDateFormat("EE, h:mm aa", Locale.ENGLISH).format(currentConditions.observationTime)
-                            temperature.text = String.format("%.0f°", currentConditions.temperature)
-                            // TODO: Proper feels like temp
-                            feelsLike.text = String.format("%.0f%s", currentConditions.heatIndex, UnitsHelper.getTemperatureUnit(currentConditions.unitSystem))
-                            dewPoint.text = String.format("%.0f%s", currentConditions.dewPoint, UnitsHelper.getTemperatureUnit(currentConditions.unitSystem))
-                            temperatureHigh.text = String.format("%.0f%%", currentConditions.humidity)
-                            windSpeed.text = String.format("%.0f %s", currentConditions.windSpeed, UnitsHelper.getSpeedUnit(currentConditions.unitSystem))
-                            windGust.text = String.format("%.0f %s", currentConditions.windGust, UnitsHelper.getSpeedUnit(currentConditions.unitSystem))
-                            windDirection.text = String.format("%d° %s", currentConditions.windDirection, directionToCardinal(currentConditions.windDirection))
-                            rainAccumulation.text = String.format("%.2f %s", currentConditions.precipitationTotal, UnitsHelper.getRainUnit(currentConditions.unitSystem))
-                            rainRate.text = String.format("%.2f %s", currentConditions.precipitationRate, UnitsHelper.getRainRateUnit(currentConditions.unitSystem))
-                            pressure.text = String.format("%.0f %s", currentConditions.pressure, UnitsHelper.getPressureUnit(currentConditions.unitSystem))
-                            uvIndex.text = String.format("%.0f", currentConditions.uv)
-                            solarRadiation.text = String.format("%.2f W/m²", currentConditions.uv)
+                            lastUpdated.text = FormatHelper.formatLongDate(currentConditions.observationTime)
+                            temperature.text = FormatHelper.formatTemperature(currentConditions.temperature, false)
+                            val feelsLikeValue = if (currentConditions.heatIndex > currentConditions.temperature) currentConditions.heatIndex else if (currentConditions.windChill < currentConditions.temperature) currentConditions.windChill else currentConditions.temperature
+
+                            feelsLike.text = FormatHelper.formatTemperature(feelsLikeValue, UnitsHelper.getTemperatureUnit(currentConditions.unitSystem), false)
+                            dewPoint.text = FormatHelper.formatTemperature(currentConditions.dewPoint, UnitsHelper.getTemperatureUnit(currentConditions.unitSystem), false)
+                            humidity.text = FormatHelper.formatHumidity(currentConditions.humidity)
+                            windSpeed.text = FormatHelper.formatWindSpeed(currentConditions.windSpeed, UnitsHelper.getSpeedUnit(currentConditions.unitSystem))
+                            windGust.text = FormatHelper.formatWindSpeed(currentConditions.windGust, UnitsHelper.getSpeedUnit(currentConditions.unitSystem))
+                            windDirection.text = FormatHelper.formatWindDirection(currentConditions.windDirection)
+                            rainAccumulation.text = FormatHelper.formatRain(currentConditions.precipitationTotal, UnitsHelper.getRainUnit(currentConditions.unitSystem))
+                            rainRate.text = FormatHelper.formatRainRate(currentConditions.precipitationRate, UnitsHelper.getRainRateUnit(currentConditions.unitSystem))
+                            pressure.text = FormatHelper.formatPressure(currentConditions.pressure, UnitsHelper.getPressureUnit(currentConditions.unitSystem))
+                            uvIndex.text = FormatHelper.formatUvIndex(currentConditions.uv)
+                            solarRadiation.text = FormatHelper.formatSolarRadiation(currentConditions.solarRadiation)
 
                             setColor(backgroundGradient != R.drawable.background_snow && backgroundGradient != R.drawable.background_cloudy)
 
@@ -103,6 +138,7 @@ class CurrentActivity : AppCompatActivity() {
                             swipeRefresh.isRefreshing = false
                         }
                     }
+
                     override fun error(e: Exception) {
                         e.printStackTrace()
                     }
@@ -116,7 +152,7 @@ class CurrentActivity : AppCompatActivity() {
     }
 
     private fun setColor(white: Boolean) {
-        val text = arrayOf(neighbourhood, lastUpdated, state, temperature, feelsLikeTitle, feelsLike, dewPointTitle, dewPoint, humidityTitle, temperatureHigh, windSpeedTitle, windSpeed, windGustTitle, windGust, windDirectionTitle, windDirection, rainAccumulationTitle, rainAccumulation, rainRateTitle, rainRate, pressureTitle, pressure, uvIndexTitle, uvIndex, solarRadiationTitle, solarRadiation)
+        val text = arrayOf(neighbourhood, lastUpdated, state, temperature, feelsLikeTitle, feelsLike, dewPointTitle, dewPoint, humidityTitle, humidity, windSpeedTitle, windSpeed, windGustTitle, windGust, windDirectionTitle, windDirection, rainAccumulationTitle, rainAccumulation, rainRateTitle, rainRate, pressureTitle, pressure, uvIndexTitle, uvIndex, solarRadiationTitle, solarRadiation)
         val images = arrayOf(stateIcon, humidityIcon, windSpeedIcon, windGustIcon, windDirectionIcon, rainAccumulationIcon, rainRateIcon, pressureIcon, uvIndexIcon, solarRadiationIcon, settings)
         val modules = arrayOf(humidityModule, windSpeedModule, windGustModule, windDirectionModule, rainAccumulationModule, rainRateModule, pressureModule, uvIndexModule, solarRadiationModule)
 

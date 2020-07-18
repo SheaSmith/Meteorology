@@ -4,17 +4,19 @@
     <color name="colorPrimaryDark">#2c3f78</color>
     <color name="colorAccent">#ffc803</color>
 
-    <color name="red">#E53935</color>
-    <color name="orange">#FBC02D</color>
+    <color name="red">#EE584B</color>
+    <color name="orange">#F5BF2D</color>
     <color name="green">#7cb342</color>
-    <color name="blue">#1976D2</color>
+    <color name="blue">#5D95F4</color>
     <color name="blue_fill">#c81976d2</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="whitebg">#dcffffff</color>
 
     <color name="bluepurple">#7875cd</color>
-    <color name="grey">#f1f3f4</color>
+    <color name="grey">#F2F2F2</color>
+    <color name="chartgrey">#D4D4D4</color>
+    <color name="charttext">#8E8F92</color>
     <color name="offblack">#000001</color>
     <color name="purple">#ba68c8</color>
 

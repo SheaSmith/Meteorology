@@ -44,4 +44,9 @@
     <string name="sun">Sun</string>
     <string name="sunset">Sunset</string>
     <string name="temperature">Temperature</string>
+    <string name="rapid">Rapid</string>
+    <string name="hourly">Hourly</string>
+    <string name="daily">Daily</string>
+    <string name="overall_statistics">Overall Statistics</string>
+    <string name="average">Average</string>
 </resources>

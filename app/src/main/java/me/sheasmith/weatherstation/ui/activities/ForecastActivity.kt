@@ -1,4 +1,4 @@
-package me.sheasmith.weatherstation
+package me.sheasmith.weatherstation.ui.activities
 
 import android.animation.LayoutTransition
 import android.os.Build
@@ -7,28 +7,28 @@ import android.view.Menu
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.children
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
-import kotlinx.android.synthetic.main.activity_current.*
 import kotlinx.android.synthetic.main.activity_forecast.*
 import kotlinx.android.synthetic.main.activity_forecast.loader
 import kotlinx.android.synthetic.main.activity_forecast.rootView
 import kotlinx.android.synthetic.main.activity_forecast.swipeRefresh
-import kotlinx.android.synthetic.main.view_forecast.*
+import me.sheasmith.weatherstation.ApiManager
+import me.sheasmith.weatherstation.ui.fragments.ForecastFragment
+import me.sheasmith.weatherstation.R
+import me.sheasmith.weatherstation.helpers.ForecastHelper
 import me.sheasmith.weatherstation.models.ApiResponse
 import me.sheasmith.weatherstation.models.Forecast
+import me.sheasmith.weatherstation.ui.adapters.ViewPagerFragmentAdapter
 import java.util.*
 
 class ForecastActivity : AppCompatActivity() {
     var lastUpdatedDate = Date()
     var forecasts: List<Forecast>? = null
     var selectedForecast = 0
-    var paddingTop = 0
-    var paddingBottom = 0
+    private var paddingTop = 0
+    private var paddingBottom = 0
     val adapter = ViewPagerFragmentAdapter(supportFragmentManager, lifecycle)
     var flags = 0
 
@@ -80,10 +80,6 @@ class ForecastActivity : AppCompatActivity() {
         }
 
         viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-            }
-
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 selectedForecast = position

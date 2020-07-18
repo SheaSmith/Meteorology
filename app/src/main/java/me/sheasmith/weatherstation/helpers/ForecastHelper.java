@@ -1,6 +1,8 @@
-package me.sheasmith.weatherstation;
+package me.sheasmith.weatherstation.helpers;
 
 import java.util.Date;
+
+import me.sheasmith.weatherstation.R;
 
 public class ForecastHelper {
     public static String getName(int iconCode) {

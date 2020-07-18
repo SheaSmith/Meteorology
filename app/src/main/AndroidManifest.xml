@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HistoryActivity"></activity>
-        <activity android:name=".ForecastActivity" />
-        <activity android:name=".CurrentActivity">
+        <activity android:name=".ui.activities.HistoryActivity"></activity>
+        <activity android:name=".ui.activities.ForecastActivity" />
+        <activity android:name=".ui.activities.CurrentActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

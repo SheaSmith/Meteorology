@@ -1,17 +1,20 @@
-package me.sheasmith.weatherstation
+package me.sheasmith.weatherstation.ui.fragments
 
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.view_forecast.*
+import me.sheasmith.weatherstation.R
+import me.sheasmith.weatherstation.helpers.ForecastHelper
+import me.sheasmith.weatherstation.helpers.FormatHelper
+import me.sheasmith.weatherstation.helpers.PreferencesHelper
+import me.sheasmith.weatherstation.helpers.UnitsHelper
 import me.sheasmith.weatherstation.models.Forecast
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -30,7 +33,7 @@ class ForecastFragment(forecast: Forecast, lastUpdatedDate: Date) : Fragment() {
 
         val iconCode = if (forecast.iconCodeDay != -1) forecast.iconCodeDay else forecast.iconCodeNight
         val backgroundResource = ForecastHelper.getBackground(iconCode)
-        isLight = backgroundResource == R.drawable.background_snow || backgroundResource == R.drawable.background_cloudy;
+        isLight = backgroundResource == R.drawable.background_snow || backgroundResource == R.drawable.background_cloudy
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -52,7 +55,7 @@ class ForecastFragment(forecast: Forecast, lastUpdatedDate: Date) : Fragment() {
         val backgroundResource = ForecastHelper.getBackground(iconCode)
         mainView.setBackgroundResource(backgroundResource)
 
-        isLight = backgroundResource == R.drawable.background_snow || backgroundResource == R.drawable.background_cloudy;
+        isLight = backgroundResource == R.drawable.background_snow || backgroundResource == R.drawable.background_cloudy
         if (!isLight) {
             lastUpdated.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
             day.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
@@ -82,23 +85,24 @@ class ForecastFragment(forecast: Forecast, lastUpdatedDate: Date) : Fragment() {
 
         nightNarrative.text = forecast.narrativeNight
 
-        // TODO: change system
+        val unitsSystem = PreferencesHelper.getUnitsSystem(requireContext())
+        
         if (forecast.temperatureMax != -9000)
-            temperatureHigh.text = String.format("%d%s", forecast.temperatureMax, UnitsHelper.getTemperatureUnit("metric"))
+            temperatureHigh.text = FormatHelper.formatTemperature(forecast.temperatureMax.toDouble(), UnitsHelper.getTemperatureUnit(unitsSystem), false)
         else
             temperatureHigh.text = "N/A"
 
         if (forecast.temperatureMin != -9000)
-            temperatureLow.text = String.format("%d%s", forecast.temperatureMin, UnitsHelper.getTemperatureUnit("metric"))
+            temperatureLow.text = FormatHelper.formatTemperature(forecast.temperatureMin.toDouble(), UnitsHelper.getTemperatureUnit(unitsSystem), false)
         else
             temperatureLow.text = "N/A"
 
         if (forecast.precipitationChanceDay != -1) {
             val isSnow = forecast.precipitationTypeDay == "snow"
 
-            chanceOfRainDay.text = String.format("%d%%", forecast.precipitationChanceDay)
-            expectedAmountDay.text = String.format("%.2f %s", if (isSnow) forecast.expectedQuantityOfSnowDay else forecast.expectedQuantityOfRainDay, UnitsHelper.getRainUnit("metric"))
-            cloudCoverDay.text = String.format("%d%%", forecast.cloudCoverDay)
+            chanceOfRainDay.text = FormatHelper.formatPercentage(forecast.precipitationChanceDay)
+            expectedAmountDay.text = FormatHelper.formatRain(if (isSnow) forecast.expectedQuantityOfSnowDay else forecast.expectedQuantityOfRainDay, UnitsHelper.getRainUnit(unitsSystem))
+            cloudCoverDay.text = FormatHelper.formatPercentage(forecast.cloudCoverDay)
 
             dayTitleRain.visibility = View.VISIBLE
             chanceOfRainTitleDay.visibility = View.VISIBLE
@@ -119,13 +123,13 @@ class ForecastFragment(forecast: Forecast, lastUpdatedDate: Date) : Fragment() {
 
         val isSnow = forecast.precipitationTypeNight == "snow"
 
-        chanceOfRainNight.text = String.format("%d%%", forecast.precipitationChanceNight)
-        expectedAmountNight.text = String.format("%.2f %s", if (isSnow) forecast.expectedQuantityOfSnowNight else forecast.expectedQuantityOfRainNight, UnitsHelper.getRainUnit("metric"))
-        cloudCoverNight.text = String.format("%d%%", forecast.cloudCoverNight)
+        chanceOfRainNight.text = FormatHelper.formatPercentage(forecast.precipitationChanceNight)
+        expectedAmountNight.text = FormatHelper.formatRain(if (isSnow) forecast.expectedQuantityOfSnowNight else forecast.expectedQuantityOfRainNight, UnitsHelper.getRainUnit(unitsSystem))
+        cloudCoverNight.text = FormatHelper.formatPercentage(forecast.cloudCoverNight)
 
         if (forecast.windSpeedDay != -1) {
-            windSpeedDay.text = String.format("%d %s", forecast.windSpeedDay, UnitsHelper.getSpeedUnit("metric"))
-            windDirectionDay.text = String.format("%d° %s", forecast.windDirectionDay, forecast.windDirectionCardinalDay)
+            windSpeedDay.text = FormatHelper.formatWindSpeed(forecast.windSpeedDay.toDouble(), UnitsHelper.getSpeedUnit(unitsSystem))
+            windDirectionDay.text = FormatHelper.formatWindDirection(forecast.windDirectionDay, forecast.windDirectionCardinalDay)
 
             dayTitleWind.visibility = View.VISIBLE
             windSpeedTitleDay.visibility = View.VISIBLE
@@ -140,14 +144,15 @@ class ForecastFragment(forecast: Forecast, lastUpdatedDate: Date) : Fragment() {
             windDirectionDay.visibility = View.GONE
         }
 
-        windSpeedNight.text = String.format("%d %s", forecast.windSpeedNight, UnitsHelper.getSpeedUnit("metric"))
-        windDirectionNight.text = String.format("%d° %s", forecast.windDirectionNight, forecast.windDirectionCardinalNight)
+        windSpeedNight.text = FormatHelper.formatWindSpeed(forecast.windSpeedNight.toDouble(), UnitsHelper.getSpeedUnit(unitsSystem))
+        windDirectionNight.text = FormatHelper.formatWindDirection(forecast.windDirectionNight, forecast.windDirectionCardinalNight)
 
         if (forecast.temperatureHeatIndexDay != -1) {
-            // TODO actual feels like temp
-            feelsLikeDay.text = String.format("%d %s", forecast.temperatureHeatIndexDay, UnitsHelper.getTemperatureUnit("metric"))
-            humidityDay.text = String.format("%.0f%%", forecast.relativeHumidityDay)
-            uvIndexDay.text = String.format("%d - %s", forecast.uvDay, forecast.uvDescriptionDay)
+            val feelsLikeDayValue = if (forecast.temperatureHeatIndexDay > forecast.temperatureDay) forecast.temperatureHeatIndexDay else if (forecast.temperatureWindChillDay < forecast.temperatureDay) forecast.temperatureWindChillDay else forecast.temperatureDay
+
+            feelsLikeDay.text = FormatHelper.formatTemperature(feelsLikeDayValue.toDouble(), UnitsHelper.getTemperatureUnit(unitsSystem), false)
+            humidityDay.text = FormatHelper.formatHumidity(forecast.relativeHumidityDay)
+            uvIndexDay.text = FormatHelper.formatUvIndex(forecast.uvDay.toDouble(), forecast.uvDescriptionDay)
 
             dayTitleTemperature.visibility = View.VISIBLE
             feelsLikeTitleDay.visibility = View.VISIBLE
@@ -166,10 +171,11 @@ class ForecastFragment(forecast: Forecast, lastUpdatedDate: Date) : Fragment() {
             uvIndexDay.visibility = View.GONE
         }
 
-        // TODO actual feels like temp
-        feelsLikeNight.text = String.format("%d %s", forecast.temperatureHeatIndexNight, UnitsHelper.getTemperatureUnit("metric"))
-        humidityNight.text = String.format("%.0f%%", forecast.relativeHumidityNight)
-        uvIndexNight.text = String.format("%d - %s", forecast.uvNight, forecast.uvDescriptionNight)
+        val feelsLikeNightValue = if (forecast.temperatureHeatIndexNight > forecast.temperatureNight) forecast.temperatureHeatIndexNight else if (forecast.temperatureWindChillNight < forecast.temperatureNight) forecast.temperatureWindChillNight else forecast.temperatureNight
+
+        FormatHelper.formatTemperature(feelsLikeNightValue.toDouble(), UnitsHelper.getTemperatureUnit(unitsSystem), false)
+        FormatHelper.formatHumidity(forecast.relativeHumidityNight)
+        FormatHelper.formatUvIndex(forecast.uvNight.toDouble(), forecast.uvDescriptionNight)
 
         moonStage.text = forecast.moonPhase
 
@@ -191,17 +197,16 @@ class ForecastFragment(forecast: Forecast, lastUpdatedDate: Date) : Fragment() {
         if (PreferencesHelper.isSouthernHemisphere(requireContext()))
             moonStageIcon.rotation = 180f
 
-        val timeFormat = SimpleDateFormat("h:mm aa", Locale.ENGLISH)
-        moonrise.text = timeFormat.format(forecast.moonriseTime)
-        moonset.text = timeFormat.format(forecast.moonsetTime)
+        moonrise.text = FormatHelper.formatTime(forecast.moonriseTime)
+        moonset.text = FormatHelper.formatTime(forecast.moonsetTime)
 
-        sunrise.text = timeFormat.format(forecast.sunriseTime)
-        sunset.text = timeFormat.format(forecast.sunsetTime)
+        sunrise.text = FormatHelper.formatTime(forecast.sunriseTime)
+        sunset.text = FormatHelper.formatTime(forecast.sunsetTime)
 
         phaseDay.text = forecast.moonPhaseDay.toString()
 
         day.text = if (forecast.nameDay == null || forecast.nameDay == "null") forecast.nameNight else forecast.nameDay
-        lastUpdated.text = String.format("Updated %s", SimpleDateFormat("EE, h:mm aa", Locale.ENGLISH).format(lastUpdatedDate))
+        lastUpdated.text = String.format("Updated %s", FormatHelper.formatLongDate(lastUpdatedDate))
         mainView.setPadding(0, paddingTop, 0, paddingBottom)
     }
 
@@ -214,6 +219,6 @@ class ForecastFragment(forecast: Forecast, lastUpdatedDate: Date) : Fragment() {
     }
 
     fun isLight(): Boolean {
-        return isLight;
+        return isLight
     }
 }

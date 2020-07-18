@@ -1,4 +1,4 @@
-package me.sheasmith.weatherstation;
+package me.sheasmith.weatherstation.ui.adapters;
 
 import java.util.ArrayList;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
+
+import me.sheasmith.weatherstation.ui.fragments.ForecastFragment;
 
 public class ViewPagerFragmentAdapter extends FragmentStateAdapter {
 
