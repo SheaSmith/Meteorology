@@ -1,9 +1,11 @@
 package me.sheasmith.weatherstation.ui.activities
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -15,18 +17,16 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import kotlinx.android.synthetic.main.activity_history.*
-import kotlinx.android.synthetic.main.activity_history.loader
-import kotlinx.android.synthetic.main.activity_history.mainView
-import kotlinx.android.synthetic.main.activity_history.rootView
-import kotlinx.android.synthetic.main.activity_history.scrollView
 import me.sheasmith.weatherstation.ApiManager
-import me.sheasmith.weatherstation.ui.charts.DateValueFormatter
 import me.sheasmith.weatherstation.R
 import me.sheasmith.weatherstation.helpers.FormatHelper
 import me.sheasmith.weatherstation.helpers.PreferencesHelper
 import me.sheasmith.weatherstation.helpers.UnitsHelper
 import me.sheasmith.weatherstation.models.ApiResponse
 import me.sheasmith.weatherstation.models.Observation
+import me.sheasmith.weatherstation.models.UnauthorisedException
+import me.sheasmith.weatherstation.ui.activities.settings.ApiKeyActivity
+import me.sheasmith.weatherstation.ui.charts.DateValueFormatter
 import me.sheasmith.weatherstation.ui.charts.HistoryMarker
 import java.text.SimpleDateFormat
 import java.util.*
@@ -88,6 +88,18 @@ class HistoryActivity : AppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 2) {
+            when (PreferencesHelper.getHistoryPeriodDefault(this)) {
+                0 -> doRequestRapid()
+                1 -> doRequestHourly()
+                else -> doRequestDaily()
+            }
+        }
+    }
+
     private fun doRequestHourly() {
         loader.visibility = View.VISIBLE
         scrollView.visibility = View.GONE
@@ -102,7 +114,30 @@ class HistoryActivity : AppCompatActivity() {
             }
 
             override fun error(e: Exception?) {
-                TODO("Not yet implemented")
+                runOnUiThread {
+                    if (e is UnauthorisedException) {
+                        AlertDialog.Builder(this@HistoryActivity)
+                                .setTitle("Invalid API Key")
+                                .setMessage("It appears as if your API Key is invalid")
+                                .setPositiveButton("Fix") { _, _ ->
+                                    startActivityForResult(Intent(this@HistoryActivity, ApiKeyActivity::class.java), 2)
+                                }
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .create()
+                                .show()
+                    } else {
+
+                        AlertDialog.Builder(this@HistoryActivity)
+                                .setTitle("No Internet")
+                                .setMessage("You do not appear to be connected to the internet. Please check your connection and try again.")
+                                .setPositiveButton("Retry") { _, _ ->
+                                    doRequestHourly()
+                                }
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .create()
+                                .show()
+                    }
+                }
             }
         }, sevenDays, Date(), this)
     }
@@ -121,7 +156,30 @@ class HistoryActivity : AppCompatActivity() {
             }
 
             override fun error(e: Exception?) {
-                TODO("Not yet implemented")
+                runOnUiThread {
+                    if (e is UnauthorisedException) {
+                        AlertDialog.Builder(this@HistoryActivity)
+                                .setTitle("Invalid API Key")
+                                .setMessage("It appears as if your API Key is invalid")
+                                .setPositiveButton("Fix") { _, _ ->
+                                    startActivityForResult(Intent(this@HistoryActivity, ApiKeyActivity::class.java), 2)
+                                }
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .create()
+                                .show()
+                    } else {
+
+                        AlertDialog.Builder(this@HistoryActivity)
+                                .setTitle("No Internet")
+                                .setMessage("You do not appear to be connected to the internet. Please check your connection and try again.")
+                                .setPositiveButton("Retry") { _, _ ->
+                                    doRequestDaily()
+                                }
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .create()
+                                .show()
+                    }
+                }
             }
         }, sevenDays, Date(), this)
     }
@@ -153,7 +211,30 @@ class HistoryActivity : AppCompatActivity() {
                 }
 
                 override fun error(e: Exception?) {
-                    TODO("Not yet implemented")
+                    runOnUiThread {
+                        if (e is UnauthorisedException) {
+                            AlertDialog.Builder(this@HistoryActivity)
+                                    .setTitle("Invalid API Key")
+                                    .setMessage("It appears as if your API Key is invalid")
+                                    .setPositiveButton("Fix") { _, _ ->
+                                        startActivityForResult(Intent(this@HistoryActivity, ApiKeyActivity::class.java), 2)
+                                    }
+                                    .setNegativeButton(android.R.string.cancel, null)
+                                    .create()
+                                    .show()
+                        } else {
+
+                            AlertDialog.Builder(this@HistoryActivity)
+                                    .setTitle("No Internet")
+                                    .setMessage("You do not appear to be connected to the internet. Please check your connection and try again.")
+                                    .setPositiveButton("Retry") { _, _ ->
+                                        doRequestRapid()
+                                    }
+                                    .setNegativeButton(android.R.string.cancel, null)
+                                    .create()
+                                    .show()
+                        }
+                    }
                 }
             }, rapidTime, this)
         }
@@ -184,7 +265,7 @@ class HistoryActivity : AppCompatActivity() {
                 format = FormatHelper.getWindSpeedFormat()
             }
             "windDirection" -> {
-                units = null
+                units = ""
                 format = FormatHelper.getWindDirectionFormat()
             }
             "rainAccumulation" -> {

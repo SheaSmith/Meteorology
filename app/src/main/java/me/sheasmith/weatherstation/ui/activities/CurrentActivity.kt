@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -16,10 +17,14 @@ import me.sheasmith.weatherstation.ApiManager
 import me.sheasmith.weatherstation.R
 import me.sheasmith.weatherstation.helpers.ForecastHelper
 import me.sheasmith.weatherstation.helpers.FormatHelper
-import me.sheasmith.weatherstation.helpers.UnitsHelper
+import me.sheasmith.weatherstation.helpers.PreferencesHelper
 import me.sheasmith.weatherstation.models.ApiResponse
 import me.sheasmith.weatherstation.models.CurrentConditions
 import me.sheasmith.weatherstation.models.Forecast
+import me.sheasmith.weatherstation.models.UnauthorisedException
+import me.sheasmith.weatherstation.ui.activities.settings.ApiKeyActivity
+import me.sheasmith.weatherstation.ui.activities.settings.LocationSearchActivity
+import me.sheasmith.weatherstation.ui.activities.settings.SettingsActivity
 
 
 class CurrentActivity : AppCompatActivity() {
@@ -42,6 +47,18 @@ class CurrentActivity : AppCompatActivity() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        }
+
+        if (PreferencesHelper.getApiKey(this) == null) {
+            startActivity(Intent(this, ApiKeyActivity::class.java))
+            finish()
+            return
+        }
+
+        if (PreferencesHelper.getPws(this) == null) {
+            startActivity(Intent(this, LocationSearchActivity::class.java))
+            finish()
+            return
         }
 
         doRequest()
@@ -92,6 +109,10 @@ class CurrentActivity : AppCompatActivity() {
         solarRadiationModule.setOnClickListener {
             showHistory("solarRadiation")
         }
+
+        settings.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
     }
 
     private fun showHistory(type: String) {
@@ -119,15 +140,15 @@ class CurrentActivity : AppCompatActivity() {
                             temperature.text = FormatHelper.formatTemperature(currentConditions.temperature, false)
                             val feelsLikeValue = if (currentConditions.heatIndex > currentConditions.temperature) currentConditions.heatIndex else if (currentConditions.windChill < currentConditions.temperature) currentConditions.windChill else currentConditions.temperature
 
-                            feelsLike.text = FormatHelper.formatTemperature(feelsLikeValue, UnitsHelper.getTemperatureUnit(currentConditions.unitSystem), false)
-                            dewPoint.text = FormatHelper.formatTemperature(currentConditions.dewPoint, UnitsHelper.getTemperatureUnit(currentConditions.unitSystem), false)
+                            feelsLike.text = FormatHelper.formatTemperature(feelsLikeValue, currentConditions.unitSystem, false)
+                            dewPoint.text = FormatHelper.formatTemperature(currentConditions.dewPoint, currentConditions.unitSystem, false)
                             humidity.text = FormatHelper.formatHumidity(currentConditions.humidity)
-                            windSpeed.text = FormatHelper.formatWindSpeed(currentConditions.windSpeed, UnitsHelper.getSpeedUnit(currentConditions.unitSystem))
-                            windGust.text = FormatHelper.formatWindSpeed(currentConditions.windGust, UnitsHelper.getSpeedUnit(currentConditions.unitSystem))
-                            windDirection.text = FormatHelper.formatWindDirection(currentConditions.windDirection)
-                            rainAccumulation.text = FormatHelper.formatRain(currentConditions.precipitationTotal, UnitsHelper.getRainUnit(currentConditions.unitSystem))
-                            rainRate.text = FormatHelper.formatRainRate(currentConditions.precipitationRate, UnitsHelper.getRainRateUnit(currentConditions.unitSystem))
-                            pressure.text = FormatHelper.formatPressure(currentConditions.pressure, UnitsHelper.getPressureUnit(currentConditions.unitSystem))
+                            windSpeed.text = FormatHelper.formatWindSpeed(currentConditions.windSpeed, currentConditions.unitSystem)
+                            windGust.text = FormatHelper.formatWindSpeed(currentConditions.windGust, currentConditions.unitSystem)
+                            windDirection.text = FormatHelper.formatWindDirection(currentConditions.windDirection.toFloat())
+                            rainAccumulation.text = FormatHelper.formatRain(currentConditions.precipitationTotal, currentConditions.unitSystem)
+                            rainRate.text = FormatHelper.formatRainRate(currentConditions.precipitationRate, currentConditions.unitSystem)
+                            pressure.text = FormatHelper.formatPressure(currentConditions.pressure, currentConditions.unitSystem)
                             uvIndex.text = FormatHelper.formatUvIndex(currentConditions.uv)
                             solarRadiation.text = FormatHelper.formatSolarRadiation(currentConditions.solarRadiation)
 
@@ -139,14 +160,58 @@ class CurrentActivity : AppCompatActivity() {
                         }
                     }
 
-                    override fun error(e: Exception) {
-                        e.printStackTrace()
+                    override fun error(e: Exception?) {
+                        runOnUiThread {
+                            if (e is UnauthorisedException) {
+                                AlertDialog.Builder(this@CurrentActivity)
+                                        .setTitle("Invalid API Key")
+                                        .setMessage("It appears as if your API Key is invalid")
+                                        .setPositiveButton("Fix") { _, _ ->
+                                            startActivityForResult(Intent(this@CurrentActivity, ApiKeyActivity::class.java), 2)
+                                        }
+                                        .setNegativeButton(android.R.string.cancel, null)
+                                        .create()
+                                        .show()
+                            } else {
+                                AlertDialog.Builder(this@CurrentActivity)
+                                        .setTitle("No Internet")
+                                        .setMessage("You do not appear to be connected to the internet. Please check your connection and try again.")
+                                        .setPositiveButton("Retry") { _, _ ->
+                                            doRequest()
+                                        }
+                                        .setNegativeButton(android.R.string.cancel, null)
+                                        .create()
+                                        .show()
+                            }
+                        }
                     }
                 }, this@CurrentActivity)
             }
 
-            override fun error(e: Exception) {
-                e.printStackTrace()
+            override fun error(e: Exception?) {
+                runOnUiThread {
+                    if (e is UnauthorisedException) {
+                        AlertDialog.Builder(this@CurrentActivity)
+                                .setTitle("Invalid API Key")
+                                .setMessage("It appears as if your API Key is invalid")
+                                .setPositiveButton("Fix") { _, _ ->
+                                    startActivityForResult(Intent(this@CurrentActivity, ApiKeyActivity::class.java), 2)
+                                }
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .create()
+                                .show()
+                    } else {
+                        AlertDialog.Builder(this@CurrentActivity)
+                                .setTitle("No Internet")
+                                .setMessage("You do not appear to be connected to the internet. Please check your connection and try again.")
+                                .setPositiveButton("Retry") { _, _ ->
+                                    doRequest()
+                                }
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .create()
+                                .show()
+                    }
+                }
             }
         }, this)
     }
@@ -182,6 +247,15 @@ class CurrentActivity : AppCompatActivity() {
                 mainView.setPadding(insets.systemWindowInsetLeft, insets.systemWindowInsetTop, insets.systemWindowInsetRight, insets.systemWindowInsetBottom)
             insets.consumeSystemWindowInsets()
             insets
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 2) {
+            swipeRefresh.isRefreshing = true
+            doRequest()
         }
     }
 }

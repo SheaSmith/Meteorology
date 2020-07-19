@@ -8,12 +8,11 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.view_forecast.*
+import kotlinx.android.synthetic.main.fragment_forecast.*
 import me.sheasmith.weatherstation.R
 import me.sheasmith.weatherstation.helpers.ForecastHelper
 import me.sheasmith.weatherstation.helpers.FormatHelper
 import me.sheasmith.weatherstation.helpers.PreferencesHelper
-import me.sheasmith.weatherstation.helpers.UnitsHelper
 import me.sheasmith.weatherstation.models.Forecast
 import java.util.*
 
@@ -37,7 +36,7 @@ class ForecastFragment(forecast: Forecast, lastUpdatedDate: Date) : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.view_forecast, container, false)
+        return inflater.inflate(R.layout.fragment_forecast, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -88,12 +87,12 @@ class ForecastFragment(forecast: Forecast, lastUpdatedDate: Date) : Fragment() {
         val unitsSystem = PreferencesHelper.getUnitsSystem(requireContext())
         
         if (forecast.temperatureMax != -9000)
-            temperatureHigh.text = FormatHelper.formatTemperature(forecast.temperatureMax.toDouble(), UnitsHelper.getTemperatureUnit(unitsSystem), false)
+            temperatureHigh.text = FormatHelper.formatTemperature(forecast.temperatureMax.toDouble(), unitsSystem, false)
         else
             temperatureHigh.text = "N/A"
 
         if (forecast.temperatureMin != -9000)
-            temperatureLow.text = FormatHelper.formatTemperature(forecast.temperatureMin.toDouble(), UnitsHelper.getTemperatureUnit(unitsSystem), false)
+            temperatureLow.text = FormatHelper.formatTemperature(forecast.temperatureMin.toDouble(), unitsSystem, false)
         else
             temperatureLow.text = "N/A"
 
@@ -101,7 +100,7 @@ class ForecastFragment(forecast: Forecast, lastUpdatedDate: Date) : Fragment() {
             val isSnow = forecast.precipitationTypeDay == "snow"
 
             chanceOfRainDay.text = FormatHelper.formatPercentage(forecast.precipitationChanceDay)
-            expectedAmountDay.text = FormatHelper.formatRain(if (isSnow) forecast.expectedQuantityOfSnowDay else forecast.expectedQuantityOfRainDay, UnitsHelper.getRainUnit(unitsSystem))
+            expectedAmountDay.text = FormatHelper.formatRain(if (isSnow) forecast.expectedQuantityOfSnowDay else forecast.expectedQuantityOfRainDay, unitsSystem)
             cloudCoverDay.text = FormatHelper.formatPercentage(forecast.cloudCoverDay)
 
             dayTitleRain.visibility = View.VISIBLE
@@ -124,12 +123,12 @@ class ForecastFragment(forecast: Forecast, lastUpdatedDate: Date) : Fragment() {
         val isSnow = forecast.precipitationTypeNight == "snow"
 
         chanceOfRainNight.text = FormatHelper.formatPercentage(forecast.precipitationChanceNight)
-        expectedAmountNight.text = FormatHelper.formatRain(if (isSnow) forecast.expectedQuantityOfSnowNight else forecast.expectedQuantityOfRainNight, UnitsHelper.getRainUnit(unitsSystem))
+        expectedAmountNight.text = FormatHelper.formatRain(if (isSnow) forecast.expectedQuantityOfSnowNight else forecast.expectedQuantityOfRainNight, unitsSystem)
         cloudCoverNight.text = FormatHelper.formatPercentage(forecast.cloudCoverNight)
 
         if (forecast.windSpeedDay != -1) {
-            windSpeedDay.text = FormatHelper.formatWindSpeed(forecast.windSpeedDay.toDouble(), UnitsHelper.getSpeedUnit(unitsSystem))
-            windDirectionDay.text = FormatHelper.formatWindDirection(forecast.windDirectionDay, forecast.windDirectionCardinalDay)
+            windSpeedDay.text = FormatHelper.formatWindSpeed(forecast.windSpeedDay.toDouble(), unitsSystem)
+            windDirectionDay.text = FormatHelper.formatWindDirection(forecast.windDirectionDay.toFloat(), forecast.windDirectionCardinalDay)
 
             dayTitleWind.visibility = View.VISIBLE
             windSpeedTitleDay.visibility = View.VISIBLE
@@ -144,13 +143,13 @@ class ForecastFragment(forecast: Forecast, lastUpdatedDate: Date) : Fragment() {
             windDirectionDay.visibility = View.GONE
         }
 
-        windSpeedNight.text = FormatHelper.formatWindSpeed(forecast.windSpeedNight.toDouble(), UnitsHelper.getSpeedUnit(unitsSystem))
-        windDirectionNight.text = FormatHelper.formatWindDirection(forecast.windDirectionNight, forecast.windDirectionCardinalNight)
+        windSpeedNight.text = FormatHelper.formatWindSpeed(forecast.windSpeedNight.toDouble(), unitsSystem)
+        windDirectionNight.text = FormatHelper.formatWindDirection(forecast.windDirectionNight.toFloat(), forecast.windDirectionCardinalNight)
 
         if (forecast.temperatureHeatIndexDay != -1) {
             val feelsLikeDayValue = if (forecast.temperatureHeatIndexDay > forecast.temperatureDay) forecast.temperatureHeatIndexDay else if (forecast.temperatureWindChillDay < forecast.temperatureDay) forecast.temperatureWindChillDay else forecast.temperatureDay
 
-            feelsLikeDay.text = FormatHelper.formatTemperature(feelsLikeDayValue.toDouble(), UnitsHelper.getTemperatureUnit(unitsSystem), false)
+            feelsLikeDay.text = FormatHelper.formatTemperature(feelsLikeDayValue.toDouble(), unitsSystem, false)
             humidityDay.text = FormatHelper.formatHumidity(forecast.relativeHumidityDay)
             uvIndexDay.text = FormatHelper.formatUvIndex(forecast.uvDay.toDouble(), forecast.uvDescriptionDay)
 
@@ -173,9 +172,9 @@ class ForecastFragment(forecast: Forecast, lastUpdatedDate: Date) : Fragment() {
 
         val feelsLikeNightValue = if (forecast.temperatureHeatIndexNight > forecast.temperatureNight) forecast.temperatureHeatIndexNight else if (forecast.temperatureWindChillNight < forecast.temperatureNight) forecast.temperatureWindChillNight else forecast.temperatureNight
 
-        FormatHelper.formatTemperature(feelsLikeNightValue.toDouble(), UnitsHelper.getTemperatureUnit(unitsSystem), false)
-        FormatHelper.formatHumidity(forecast.relativeHumidityNight)
-        FormatHelper.formatUvIndex(forecast.uvNight.toDouble(), forecast.uvDescriptionNight)
+        feelsLikeNight.text = FormatHelper.formatTemperature(feelsLikeNightValue.toDouble(), unitsSystem, false)
+        humidityNight.text = FormatHelper.formatHumidity(forecast.relativeHumidityNight)
+        uvIndexNight.text = FormatHelper.formatUvIndex(forecast.uvNight.toDouble(), forecast.uvDescriptionNight)
 
         moonStage.text = forecast.moonPhase
 

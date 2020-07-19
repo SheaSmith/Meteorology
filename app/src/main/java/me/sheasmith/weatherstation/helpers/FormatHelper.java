@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import me.sheasmith.weatherstation.models.UnitsSystem;
+
 /**
  * Created by Shea Smith on 18/07/2020.
  */
@@ -31,7 +33,7 @@ public class FormatHelper {
         return String.format(Locale.ENGLISH, getTemperatureFormat(false, decimals), temperature);
     }
 
-    public static String formatTemperature(double temperature, String unitsSystem, boolean decimals) {
+    public static String formatTemperature(double temperature, UnitsSystem unitsSystem, boolean decimals) {
         return String.format(Locale.ENGLISH, getTemperatureFormat(true, decimals), temperature, UnitsHelper.getTemperatureUnit(unitsSystem));
     }
 
@@ -50,8 +52,7 @@ public class FormatHelper {
     }
 
 
-
-    public static String formatWindSpeed(double windSpeed, String unitsSystem) {
+    public static String formatWindSpeed(double windSpeed, UnitsSystem unitsSystem) {
         return String.format(Locale.ENGLISH, getWindSpeedFormat(), windSpeed, UnitsHelper.getSpeedUnit(unitsSystem));
     }
 
@@ -60,27 +61,25 @@ public class FormatHelper {
     }
 
 
-
-    public static String formatWindDirection(int windDirection) {
+    public static String formatWindDirection(float windDirection) {
         return String.format(Locale.ENGLISH, getWindDirectionFormat(), windDirection, degreesToCardinal(windDirection));
     }
 
-    public static String formatWindDirection(int windDirection, String windDirectionCardinal) {
+    public static String formatWindDirection(float windDirection, String windDirectionCardinal) {
         return String.format(Locale.ENGLISH, getWindDirectionFormat(), windDirection, windDirectionCardinal);
     }
 
     public static String getWindDirectionFormat() {
-        return "%d° %s";
+        return "%.0f° %s";
     }
 
-    public static String degreesToCardinal(int degrees) {
-        String[] directions = new String[] { "N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW", "N" };
+    public static String degreesToCardinal(float degrees) {
+        String[] directions = new String[]{"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW", "N"};
         return directions[(int) Math.floor(((degrees + 11.25) % 360) / 22.5)];
     }
 
 
-
-    public static String formatRain(double rain, String unitsSystem) {
+    public static String formatRain(double rain, UnitsSystem unitsSystem) {
         return String.format(Locale.ENGLISH, getRainFormat(), rain, UnitsHelper.getRainUnit(unitsSystem));
     }
 
@@ -88,13 +87,12 @@ public class FormatHelper {
         return "%.2f %s";
     }
 
-    public static String formatRainRate(double rainRate, String unitsSystem) {
+    public static String formatRainRate(double rainRate, UnitsSystem unitsSystem) {
         return String.format(getRainFormat(), rainRate, UnitsHelper.getRainRateUnit(unitsSystem));
     }
 
 
-
-    public static String formatPressure(double pressure, String unitsSystem) {
+    public static String formatPressure(double pressure, UnitsSystem unitsSystem) {
         return String.format(getPressureFormat(), pressure, UnitsHelper.getPressureUnit(unitsSystem));
     }
 
@@ -113,7 +111,7 @@ public class FormatHelper {
     }
 
     public static String getUvIndexFormat(boolean hasDescription) {
-        return hasDescription ? "%0.f - %s" : "%.0f";
+        return hasDescription ? "%.0f - %s" : "%.0f";
     }
 
 
@@ -143,5 +141,14 @@ public class FormatHelper {
 
     public static SimpleDateFormat getTimeFormat() {
         return new SimpleDateFormat("h:mm aa", Locale.ENGLISH);
+    }
+
+
+    public static String formatElevation(double elevation, UnitsSystem unitsSystem) {
+        return String.format(getElevationFormat(), elevation, UnitsHelper.getElevationUnit(unitsSystem));
+    }
+
+    public static String getElevationFormat() {
+        return "%.1f %s";
     }
 }

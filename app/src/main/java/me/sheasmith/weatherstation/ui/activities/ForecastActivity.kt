@@ -1,26 +1,27 @@
 package me.sheasmith.weatherstation.ui.activities
 
 import android.animation.LayoutTransition
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import android.view.WindowManager
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import kotlinx.android.synthetic.main.activity_forecast.*
-import kotlinx.android.synthetic.main.activity_forecast.loader
-import kotlinx.android.synthetic.main.activity_forecast.rootView
-import kotlinx.android.synthetic.main.activity_forecast.swipeRefresh
 import me.sheasmith.weatherstation.ApiManager
-import me.sheasmith.weatherstation.ui.fragments.ForecastFragment
 import me.sheasmith.weatherstation.R
 import me.sheasmith.weatherstation.helpers.ForecastHelper
 import me.sheasmith.weatherstation.models.ApiResponse
 import me.sheasmith.weatherstation.models.Forecast
+import me.sheasmith.weatherstation.models.UnauthorisedException
+import me.sheasmith.weatherstation.ui.activities.settings.ApiKeyActivity
 import me.sheasmith.weatherstation.ui.adapters.ViewPagerFragmentAdapter
+import me.sheasmith.weatherstation.ui.fragments.ForecastFragment
 import java.util.*
 
 class ForecastActivity : AppCompatActivity() {
@@ -137,7 +138,29 @@ class ForecastActivity : AppCompatActivity() {
             }
 
             override fun error(e: Exception?) {
-                TODO("Not yet implemented")
+                runOnUiThread {
+                    if (e is UnauthorisedException) {
+                        AlertDialog.Builder(this@ForecastActivity)
+                                .setTitle("Invalid API Key")
+                                .setMessage("It appears as if your API Key is invalid")
+                                .setPositiveButton("Fix") { _, _ ->
+                                    startActivityForResult(Intent(this@ForecastActivity, ApiKeyActivity::class.java), 2)
+                                }
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .create()
+                                .show()
+                    } else {
+                        AlertDialog.Builder(this@ForecastActivity)
+                                .setTitle("No Internet")
+                                .setMessage("You do not appear to be connected to the internet. Please check your connection and try again.")
+                                .setPositiveButton("Retry") { _, _ ->
+                                    doRequest()
+                                }
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .create()
+                                .show()
+                    }
+                }
             }
 
         }, this)
@@ -156,6 +179,15 @@ class ForecastActivity : AppCompatActivity() {
 
             insets.consumeSystemWindowInsets()
             insets
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 2) {
+            swipeRefresh.isRefreshing = true
+            doRequest()
         }
     }
 }

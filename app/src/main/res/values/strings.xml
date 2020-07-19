@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Weather Station</string>
+    <string name="app_name">Meteorology</string>
     <string name="title_activity_weather">WeatherActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -49,4 +49,25 @@
     <string name="daily">Daily</string>
     <string name="overall_statistics">Overall Statistics</string>
     <string name="average">Average</string>
+    <string name="change">Change</string>
+    <string name="weather_station_settings">Weather Station Settings</string>
+    <string name="currently_selected_pws">Currently Selected Weather Station</string>
+    <string name="neighbourhood">Neighbourhood</string>
+    <string name="country">Country</string>
+    <string name="location">Location</string>
+    <string name="elevation">Elevation</string>
+    <string name="software">Software</string>
+    <string name="other_settings">Other Settings</string>
+    <string name="units_system">Units System</string>
+    <string name="hemisphere">Hemisphere</string>
+    <string name="weather_underground_api_key">Weather Underground API Key</string>
+    <string name="change_api_key">Change API Key</string>
+    <string name="api_key_info">In order to use this app a Weather Underground API Key is required. This key is only available to those who own weather stations and who upload data to Weather Underground. If you do not upload data to Weather Underground or do not own a weather station, then you will have to find an alternative weather app.\n\nIn order to get the API Key, go to https://www.wunderground.com/member/api-keys, agree to the terms of service and click generate new key. Then copy the API key to the clipboard and paste it in the input above.\n\nIf an API Key has already been created, then you can just copy it into here.</string>
+    <string name="save">Save</string>
+    <string name="change_pws">Change Weather Station</string>
+    <string name="enter_a_location">Enter a location</string>
+    <string name="no_results_found">No results found</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="done">Done</string>
+    <string name="none">None</string>
 </resources>

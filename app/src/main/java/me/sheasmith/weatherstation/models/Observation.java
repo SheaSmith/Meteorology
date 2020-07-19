@@ -46,7 +46,7 @@ public class Observation {
     public double precipitationRate;
     public double precipitationTotal;
 
-    public String unitSystem;
+    public UnitsSystem unitSystem;
 
     public Observation(JSONObject json) throws JSONException, ParseException {
         stationId = json.getString("stationID");
@@ -68,16 +68,16 @@ public class Observation {
 
         if (json.has("metric")) {
             unitsContainer = json.getJSONObject("metric");
-            unitSystem = "metric";
+            unitSystem = UnitsSystem.METRIC;
         } else if (json.has("imperial")) {
             unitsContainer = json.getJSONObject("imperial");
-            unitSystem = "imperial";
+            unitSystem = UnitsSystem.IMPERIAL;
         } else if (json.has("metric_si")) {
             unitsContainer = json.getJSONObject("metric_si");
-            unitSystem = "metric_si";
+            unitSystem = UnitsSystem.METRIC_SI;
         } else if (json.has("uk_hybrid")) {
             unitsContainer = json.getJSONObject("uk_hybrid");
-            unitSystem = "uk_hybrid";
+            unitSystem = UnitsSystem.UK_HYBRID;
         } else {
             unitsContainer = new JSONObject();
             unitSystem = null;

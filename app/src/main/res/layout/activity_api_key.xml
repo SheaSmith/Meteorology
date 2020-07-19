@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_settings">
+
+    <TextView
+        android:id="@+id/pageTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/change_api_key"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        app:fontFamily="sans-serif-light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/back"
+        app:layout_constraintBottom_toBottomOf="@+id/pageTitle"
+        app:layout_constraintStart_toStartOf="@+id/leftGutterGuide"
+        app:layout_constraintTop_toTopOf="@+id/pageTitle"
+        app:srcCompat="@drawable/icon_back" />
+
+    <TextView
+        android:id="@+id/apiKeyTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/weather_underground_api_key"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/leftGutterGuide"
+        app:layout_constraintTop_toBottomOf="@+id/pageTitle" />
+
+    <EditText
+        android:id="@+id/apiKey"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:background="@color/white"
+        android:hint="@string/api_key"
+        android:importantForAutofill="no"
+        android:inputType="textVisiblePassword"
+        android:padding="4dp"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textCursorDrawable="@null"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/rightGutterGuide"
+        app:layout_constraintStart_toStartOf="@+id/apiKeyTitle"
+        app:layout_constraintTop_toBottomOf="@+id/apiKeyTitle" />
+
+    <TextView
+        android:id="@+id/apiKeyInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:autoLink="web"
+        android:text="@string/api_key_info"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/rightGutterGuide"
+        app:layout_constraintStart_toStartOf="@+id/leftGutterGuide"
+        app:layout_constraintTop_toBottomOf="@+id/apiKey" />
+
+    <Button
+        android:id="@+id/save"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        app:layout_constraintEnd_toStartOf="@+id/rightGutterGuide"
+        app:layout_constraintTop_toBottomOf="@+id/apiKeyInfo" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftGutterGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="32dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightGutterGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="32dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

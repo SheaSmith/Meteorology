@@ -36,6 +36,8 @@ public class CurrentConditions {
     public double precipitationTotal;
     public double elevation;
 
+    public UnitsSystem unitSystem;
+
     public CurrentConditions(JSONObject json) throws JSONException {
         this.stationId = json.getString("stationID");
         try {
@@ -59,16 +61,16 @@ public class CurrentConditions {
 
         if (json.has("metric")) {
             unitsContainer = json.getJSONObject("metric");
-            unitSystem = "metric";
+            unitSystem = UnitsSystem.METRIC;
         } else if (json.has("imperial")) {
             unitsContainer = json.getJSONObject("imperial");
-            unitSystem = "imperial";
+            unitSystem = UnitsSystem.IMPERIAL;
         } else if (json.has("metric_si")) {
             unitsContainer = json.getJSONObject("metric_si");
-            unitSystem = "metric_si";
+            unitSystem = UnitsSystem.METRIC_SI;
         } else if (json.has("uk_hybrid")) {
             unitsContainer = json.getJSONObject("uk_hybrid");
-            unitSystem = "uk_hybrid";
+            unitSystem = UnitsSystem.UK_HYBRID;
         } else {
             unitsContainer = new JSONObject();
             unitSystem = null;
@@ -85,6 +87,4 @@ public class CurrentConditions {
         this.precipitationTotal = unitsContainer.getDouble("precipTotal");
         this.elevation = unitsContainer.getDouble("elev");
     }
-
-    public String unitSystem;
 }
