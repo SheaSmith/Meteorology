@@ -3,15 +3,24 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('C:\\Users\\Shea\\keystore.jks')
+            storePassword 'Dexter9872'
+            keyAlias 'key0'
+            keyPassword 'Dexter9872'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "me.sheasmith.weatherstation"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 3
-        versionName "2.0"
+        versionCode 4
+        versionName "2.0.1"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         vectorDrawables.useSupportLibrary = true
+        signingConfig signingConfigs.release
     }
     buildTypes {
         release {
